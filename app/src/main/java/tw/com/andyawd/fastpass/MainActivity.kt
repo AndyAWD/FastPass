@@ -1,32 +1,40 @@
 package tw.com.andyawd.fastpass
 
+import android.Manifest
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.telephony.SmsManager
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.integration.android.IntentIntegrator
+import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
+import pub.devrel.easypermissions.EasyPermissions
+import pub.devrel.easypermissions.EasyPermissions.PermissionCallbacks
 import tw.com.andyawd.andyawdlibrary.AWDConstants
 import tw.com.andyawd.andyawdlibrary.AWDLog
+import tw.com.andyawd.andyawdlibrary.AWDPermissionsFailAlertDialog
+import java.util.Objects.requireNonNull
 import java.util.concurrent.TimeUnit
 
 
-class MainActivity : AppCompatActivity() {
-
-    companion object {
-        const val SMS_SEND_TIMER = 8L
-    }
+class MainActivity : AppCompatActivity(), PermissionCallbacks {
 
     private var smsTimerDisposable: Disposable? = null
+    private var scannerArray: Array<String>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        requireNonNull(supportActionBar)?.hide()
 
         initComponent()
         initClickListener()
@@ -34,12 +42,53 @@ class MainActivity : AppCompatActivity() {
         startScanner()
     }
 
-    private fun initClickListener() {
-        mbAmStartScanner.setOnClickListener {
+    override fun onDestroy() {
+        super.onDestroy()
+        try {
+            unregisterReceiver(sendSmsReceiver)
+        } catch (e: Exception) {
+
+        }
+    }
+
+    private fun initComponent() {
+        AWDLog.setLogLevel(AWDConstants.LOG_VERBOSE)
+
+        val sharedPreferences =
+            getSharedPreferences(BaseConstants.FAST_PASS, Context.MODE_PRIVATE)
+        scAmAutoSendSms.isChecked = sharedPreferences.getBoolean(BaseConstants.IS_AUTO_SEND, false)
+
+        setSendSmsText(scAmAutoSendSms.isChecked)
+    }
+
+    private val mbAmStartScannerClick = object : Observer<Unit> {
+        override fun onComplete() {
+
+        }
+
+        override fun onSubscribe(d: Disposable) {
+
+        }
+
+        override fun onNext(t: Unit) {
             startScanner()
         }
 
-        mbAmOpenSms.setOnClickListener {
+        override fun onError(e: Throwable) {
+
+        }
+    }
+
+    private val mbAmOpenSmsClick = object : Observer<Unit> {
+        override fun onComplete() {
+
+        }
+
+        override fun onSubscribe(d: Disposable) {
+
+        }
+
+        override fun onNext(t: Unit) {
             val intent = Intent()
             intent.action = Intent.ACTION_SENDTO
             intent.data = Uri.parse("smsto:1922")
@@ -47,15 +96,116 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        mbAmSendSmsInformation.setOnClickListener {
-            smsTimerDisposable?.dispose()
-            mbAmSendSmsInformation.text = resources.getString(R.string.smsCancel)
+        override fun onError(e: Throwable) {
+
         }
     }
 
-    private fun initComponent() {
+    private val mbAmSendSmsInformationClick = object : Observer<Unit> {
+        override fun onComplete() {
 
-        AWDLog.setLogLevel(AWDConstants.LOG_VERBOSE)
+        }
+
+        override fun onSubscribe(d: Disposable) {
+
+        }
+
+        override fun onNext(t: Unit) {
+            smsTimerDisposable?.dispose()
+            mbAmSendSmsInformation.text = resources.getString(R.string.smsCancel)
+            mbAmSendSmsInformation.isEnabled = false
+            scAmAutoSendSms.isEnabled = true
+            gAmTimer.visibility = View.VISIBLE
+        }
+
+        override fun onError(e: Throwable) {
+
+        }
+    }
+
+    private fun initClickListener() {
+
+        mbAmStartScanner.clicks()
+            .throttleFirst(BaseConstants.CLICK_CLOCK_TIMER, TimeUnit.MILLISECONDS)
+            .subscribe(mbAmStartScannerClick)
+        mbAmOpenSms.clicks().throttleFirst(BaseConstants.CLICK_CLOCK_TIMER, TimeUnit.MILLISECONDS)
+            .subscribe(mbAmOpenSmsClick)
+        mbAmSendSmsInformation.clicks()
+            .throttleFirst(BaseConstants.CLICK_CLOCK_TIMER, TimeUnit.MILLISECONDS)
+            .subscribe(mbAmSendSmsInformationClick)
+
+        scAmAutoSendSms.setOnCheckedChangeListener { _, b ->
+
+            val sharedPreferences =
+                getSharedPreferences(BaseConstants.FAST_PASS, Context.MODE_PRIVATE)
+            sharedPreferences.edit().putBoolean(BaseConstants.IS_AUTO_SEND, b).apply()
+
+            setSendSmsText(b)
+
+            if (b) {
+                val permission = arrayOf(Manifest.permission.SEND_SMS)
+                if (EasyPermissions.hasPermissions(this, *permission)) {
+                    AWDLog.d("有簡訊權限")
+
+                } else {
+                    EasyPermissions.requestPermissions(
+                        this,
+                        "開權限",
+                        BaseConstants.SMS_PERMISSIONS_REQUEST_CODE,
+                        *permission
+                    )
+
+                    AWDLog.d("沒簡訊權限")
+                }
+            } else {
+
+            }
+        }
+    }
+
+    private fun startSendSms(isAutoSend: Boolean) {
+
+        if (isAutoSend) {
+//            val smsManager = SmsManager.getDefault()
+//
+//            val sendSmsActionIntent = Intent(BaseConstants.SEND_SMS_ACTION)
+//            val sendSmsActionBroadcast =
+//                PendingIntent.getBroadcast(this, 102, sendSmsActionIntent, 0)
+//
+//            registerReceiver(sendSmsReceiver, IntentFilter(BaseConstants.SEND_SMS_ACTION))
+//
+//            smsManager.sendTextMessage(
+//                "0910543299",
+//                null,
+//                "測試簡訊",
+//                sendSmsActionBroadcast,
+//                null
+//            )
+
+            Toast.makeText(this, "簡訊就當作寄出了吧", Toast.LENGTH_SHORT).show()
+            mbAmSendSmsInformation.text = "簡訊寄出成功"
+
+        } else {
+            if (!BaseConstants.SMS_TO.equals(scannerArray?.get(0), false)) {
+                return
+            }
+
+            mbAmSendSmsInformation.visibility = View.GONE
+
+            val intent = Intent()
+            intent.action = Intent.ACTION_SENDTO
+            intent.data = Uri.parse("smsto:${scannerArray?.get(1)}")
+            intent.putExtra("sms_body", scannerArray?.get(2))
+            startActivity(intent)
+        }
+    }
+
+    private fun setSendSmsText(isChecked: Boolean) {
+        if (isChecked) {
+            scAmAutoSendSms.text = resources.getString(R.string.autoSendSms)
+        } else {
+            scAmAutoSendSms.text = resources.getString(R.string.manualSendSms)
+        }
     }
 
     private fun startScanner() {
@@ -68,55 +218,46 @@ class MainActivity : AppCompatActivity() {
         intentIntegrator.initiateScan()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if (result != null) {
-
-            val scannerText = result.contents
-            AWDLog.d("scannerText: $scannerText")
-
-            if (scannerText != null) {
-
-                avtAmScannerText.text = scannerText
-
-                Observable
-                    .interval(0, 1, TimeUnit.SECONDS)
-                    .take(SMS_SEND_TIMER)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(smsTimerSubscribe)
-
-            } else {
-                avtAmScannerText.text = "掃不到資料"
+    private val sendSmsReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            when (resultCode) {
+                RESULT_OK -> {
+                    AWDLog.d("簡訊成功")
+                    mbAmSendSmsInformation.text = "簡訊寄出成功"
+                }
+                SmsManager.RESULT_ERROR_GENERIC_FAILURE -> AWDLog.d("錯誤")
+                SmsManager.RESULT_ERROR_RADIO_OFF -> AWDLog.d("廣播關閉")
+                SmsManager.RESULT_ERROR_NULL_PDU -> AWDLog.d("沒有PDU")
+                SmsManager.RESULT_ERROR_NO_SERVICE -> AWDLog.d("無法使用簡訊")
             }
         }
     }
 
     private val smsTimerSubscribe = object : Observer<Long> {
         override fun onComplete() {
-            AWDLog.d("onComplete")
 
             mbAmSendSmsInformation.text = resources.getString(R.string.smsSend)
             gAmTimer.visibility = View.VISIBLE
 
-            val intent = Intent()
-            intent.action = Intent.ACTION_SENDTO
-            intent.data = Uri.parse("smsto:0910543299")
-            intent.putExtra("sms_body", "123456")
-            startActivity(intent)
+            mbAmSendSmsInformation.isEnabled = false
+            scAmAutoSendSms.isEnabled = true
+
+            val sharedPreferences =
+                getSharedPreferences(BaseConstants.FAST_PASS, Context.MODE_PRIVATE)
+            startSendSms(sharedPreferences.getBoolean(BaseConstants.IS_AUTO_SEND, false))
         }
 
         override fun onSubscribe(d: Disposable) {
             smsTimerDisposable = d
+            mbAmSendSmsInformation.visibility = View.VISIBLE
             gAmTimer.visibility = View.GONE
+            scAmAutoSendSms.isEnabled = false
         }
 
         override fun onNext(t: Long) {
 
-            val smsSecond = SMS_SEND_TIMER - t - 1L
+            val smsSecond = BaseConstants.SMS_SEND_TIMER - t - 1L
 
-            AWDLog.d("onNext: $t / smsSecond: $smsSecond")
             mbAmSendSmsInformation.text = resources.getString(R.string.smsTimer, smsSecond)
         }
 
@@ -125,4 +266,77 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+
+        if (result == null) {
+            mbAmSendSmsInformation.visibility = View.GONE
+            avtAmScannerText.text = "掃瞄錯誤"
+            return
+        }
+
+        val scannerText = result.contents
+
+        if (scannerText != null) {
+
+            try {
+                mbAmSendSmsInformation.isEnabled = true
+
+                scannerArray = scannerText.split(":").toTypedArray()
+
+                if ("1922" != scannerArray?.get(1)) {
+                    mbAmSendSmsInformation.visibility = View.GONE
+                    avtAmScannerText.text = "簡訊號碼不是1922"
+
+                    return
+                }
+
+                avtAmScannerText.text =
+                    resources.getString(
+                        R.string.smsInformation,
+                        scannerArray?.get(1),
+                        scannerArray?.get(2)
+                    )
+
+                Observable
+                    .interval(0, 1, TimeUnit.SECONDS)
+                    .take(BaseConstants.SMS_SEND_TIMER)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(smsTimerSubscribe)
+
+            } catch (e: Exception) {
+                mbAmSendSmsInformation.visibility = View.GONE
+                avtAmScannerText.text = "QR Code讀取失敗"
+            }
+        } else {
+            mbAmSendSmsInformation.visibility = View.GONE
+            avtAmScannerText.text = "掃不到資料"
+        }
+
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
+        if (BaseConstants.SMS_PERMISSIONS_REQUEST_CODE == requestCode) {
+            val sharedPreferences =
+                getSharedPreferences(BaseConstants.FAST_PASS, Context.MODE_PRIVATE)
+            startSendSms(sharedPreferences.getBoolean(BaseConstants.IS_AUTO_SEND, false))
+        }
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            AWDPermissionsFailAlertDialog(this, perms)
+        }
+    }
 }

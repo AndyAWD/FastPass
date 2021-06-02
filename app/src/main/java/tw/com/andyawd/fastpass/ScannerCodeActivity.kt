@@ -5,28 +5,25 @@ import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import com.journeyapps.barcodescanner.CaptureManager
 import kotlinx.android.synthetic.main.activity_scanner_code.*
-import tw.com.andyawd.andyawdlibrary.AWDLog
 
 class ScannerCodeActivity : AppCompatActivity() {
 
     private var captureManager: CaptureManager? = null
-    private var isFlashlightOpen = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scanner_code)
 
         initComponent(savedInstanceState)
+        initClickListener()
+    }
 
-        atvAscFlashlight.setOnClickListener {
-            AWDLog.d("atvAscFlashLight")
-
-            isFlashlightOpen = if (isFlashlightOpen) {
-                dbvAscScanner.setTorchOff()
-                false
-            } else {
+    private fun initClickListener() {
+        scAscAutoSendSms.setOnCheckedChangeListener { _, b ->
+            if (b) {
                 dbvAscScanner.setTorchOn()
-                true
+            } else {
+                dbvAscScanner.setTorchOff()
             }
         }
     }

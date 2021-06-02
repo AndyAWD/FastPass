@@ -1,14 +1,11 @@
 <resources>
-    <string name="app_name">簡訊實連快速通關</string>
+    <string name="app_name">快速實連</string>
     <string name="title_activity_scanner">ScannerActivity</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
     <string name="smsTimer">還有%1$d秒寄出簡訊\n或者點我取消寄出簡訊</string>
     <string name="smsSend">開始寄出簡訊</string>
-    <string name="smsCancel">取消寄出請重新掃描</string>
-
-
+    <string name="smsCancel">簡訊取消寄出\n請重新掃描</string>
+    <string name="autoSendSms">目前是自動寄出簡訊</string>
+    <string name="manualSendSms">目前是手動寄出簡訊</string>
+    <string name="smsInformation">簡訊號碼：%1$s\n簡訊內容：\n%2$s</string>
+    <string name="flashlight">閃光燈</string>
 </resources>

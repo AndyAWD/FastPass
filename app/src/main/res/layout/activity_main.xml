@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
-        android:background="@color/hexColor008_Snow">
+        android:background="@color/hexColor138_MediumSlateBlue">
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/gAmTimer"
@@ -22,17 +22,36 @@
             app:constraint_referenced_ids="mbAmStartScanner,mbAmOpenSms"
             tools:visibility="visible" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/avtAmScannerText"
-            android:layout_width="200dp"
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/scAmAutoSendSms"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:autoSizeTextType="uniform"
-            android:background="@color/hexColor004_Silver"
-            app:layout_constraintBottom_toTopOf="@+id/mbAmSendSmsInformation"
-            app:layout_constraintDimensionRatio="1:1"
+            android:lines="1"
+            android:paddingStart="@dimen/magic_8dp"
+            android:paddingEnd="@dimen/magic_8dp"
+            android:text="@string/manualSendSms"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintBottom_toTopOf="@+id/avtAmScannerText"
+            app:layout_constraintDimensionRatio="4:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintVertical_weight="1"
+            app:switchPadding="16dp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/avtAmScannerText"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="@dimen/magic_8dp"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintBottom_toTopOf="@+id/mbAmSendSmsInformation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/scAmAutoSendSms"
+            app:layout_constraintVertical_weight="2"
             tools:text="123132" />
 
         <com.google.android.material.button.MaterialButton
@@ -41,14 +60,19 @@
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/magic_8dp"
             android:layout_marginEnd="@dimen/magic_8dp"
-            android:autoSizeTextType="uniform"
+            android:layout_marginBottom="@dimen/magic_8dp"
             android:text="@string/smsTimer"
+            android:visibility="gone"
+            app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toTopOf="@+id/mbAmStartScanner"
             app:layout_constraintDimensionRatio="4:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/avtAmScannerText"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintVertical_weight="1"
+            tools:visibility="visible" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/mbAmStartScanner"
@@ -56,14 +80,15 @@
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/magic_8dp"
             android:layout_marginEnd="@dimen/magic_8dp"
-            android:autoSizeTextType="uniform"
             android:text="掃瞄QR code"
+            app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toTopOf="@+id/mbAmOpenSms"
             app:layout_constraintDimensionRatio="4:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/mbAmSendSmsInformation"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintVertical_weight="1" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/mbAmOpenSms"
@@ -71,12 +96,14 @@
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/magic_8dp"
             android:layout_marginEnd="@dimen/magic_8dp"
-            android:autoSizeTextType="uniform"
+            android:layout_marginBottom="@dimen/magic_8dp"
             android:text="開啟簡訊1922頁面"
+            app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="4:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mbAmStartScanner" />
+            app:layout_constraintTop_toBottomOf="@+id/mbAmStartScanner"
+            app:layout_constraintVertical_weight="1" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
