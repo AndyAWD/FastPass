@@ -61,68 +61,6 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
         setSendSmsText(scAmAutoSendSms.isChecked)
     }
 
-    private val mbAmStartScannerClick = object : Observer<Unit> {
-        override fun onComplete() {
-
-        }
-
-        override fun onSubscribe(d: Disposable) {
-
-        }
-
-        override fun onNext(t: Unit) {
-            startScanner()
-        }
-
-        override fun onError(e: Throwable) {
-
-        }
-    }
-
-    private val mbAmOpenSmsClick = object : Observer<Unit> {
-        override fun onComplete() {
-
-        }
-
-        override fun onSubscribe(d: Disposable) {
-
-        }
-
-        override fun onNext(t: Unit) {
-            val intent = Intent()
-            intent.action = Intent.ACTION_SENDTO
-            intent.data = Uri.parse("smsto:1922")
-            intent.putExtra("sms_body", "")
-            startActivity(intent)
-        }
-
-        override fun onError(e: Throwable) {
-
-        }
-    }
-
-    private val mbAmSendSmsInformationClick = object : Observer<Unit> {
-        override fun onComplete() {
-
-        }
-
-        override fun onSubscribe(d: Disposable) {
-
-        }
-
-        override fun onNext(t: Unit) {
-            smsTimerDisposable?.dispose()
-            mbAmSendSmsInformation.text = resources.getString(R.string.smsCancel)
-            mbAmSendSmsInformation.isEnabled = false
-            scAmAutoSendSms.isEnabled = true
-            gAmTimer.visibility = View.VISIBLE
-        }
-
-        override fun onError(e: Throwable) {
-
-        }
-    }
-
     private fun initClickListener() {
 
         mbAmStartScanner.clicks()
@@ -184,7 +122,6 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
 
             Toast.makeText(this, "簡訊就當作寄出了吧", Toast.LENGTH_SHORT).show()
             mbAmSendSmsInformation.text = "簡訊寄出成功"
-
         } else {
             if (!BaseConstants.SMS_TO.equals(scannerArray?.get(0), false)) {
                 return
@@ -218,12 +155,79 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
         intentIntegrator.initiateScan()
     }
 
+    private fun intentSmsApp() {
+        val intent = Intent()
+        intent.action = Intent.ACTION_SENDTO
+        intent.data = Uri.parse("smsto:1922")
+        intent.putExtra("sms_body", "")
+        startActivity(intent)
+    }
+
+    private val mbAmStartScannerClick = object : Observer<Unit> {
+        override fun onComplete() {
+
+        }
+
+        override fun onSubscribe(d: Disposable) {
+
+        }
+
+        override fun onNext(t: Unit) {
+            startScanner()
+        }
+
+        override fun onError(e: Throwable) {
+
+        }
+    }
+
+    private val mbAmOpenSmsClick = object : Observer<Unit> {
+        override fun onComplete() {
+
+        }
+
+        override fun onSubscribe(d: Disposable) {
+
+        }
+
+        override fun onNext(t: Unit) {
+            intentSmsApp()
+        }
+
+        override fun onError(e: Throwable) {
+
+        }
+    }
+
+    private val mbAmSendSmsInformationClick = object : Observer<Unit> {
+        override fun onComplete() {
+
+        }
+
+        override fun onSubscribe(d: Disposable) {
+
+        }
+
+        override fun onNext(t: Unit) {
+            smsTimerDisposable?.dispose()
+            mbAmSendSmsInformation.text = resources.getString(R.string.smsCancel)
+            mbAmSendSmsInformation.isEnabled = false
+            scAmAutoSendSms.isEnabled = true
+            gAmTimer.visibility = View.VISIBLE
+        }
+
+        override fun onError(e: Throwable) {
+
+        }
+    }
+
     private val sendSmsReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (resultCode) {
                 RESULT_OK -> {
                     AWDLog.d("簡訊成功")
                     mbAmSendSmsInformation.text = "簡訊寄出成功"
+                    intentSmsApp()
                 }
                 SmsManager.RESULT_ERROR_GENERIC_FAILURE -> AWDLog.d("錯誤")
                 SmsManager.RESULT_ERROR_RADIO_OFF -> AWDLog.d("廣播關閉")
