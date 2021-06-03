@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">快速實連</string>
+    <string name="app_name">快速實聯</string>
     <string name="title_activity_scanner">ScannerActivity</string>
     <string name="sms_timer">還有%1$d秒寄出簡訊\n或者點我取消寄出</string>
     <string name="sms_send">開始寄出簡訊</string>
