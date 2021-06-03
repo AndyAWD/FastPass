@@ -83,23 +83,29 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
             setSendSmsText(b)
 
             if (b) {
-                val permission = arrayOf(Manifest.permission.SEND_SMS)
-                if (EasyPermissions.hasPermissions(this, *permission)) {
-                    AWDLog.d("有簡訊權限")
-
-                } else {
-                    EasyPermissions.requestPermissions(
-                        this,
-                        "開權限",
-                        BaseConstants.SMS_PERMISSIONS_REQUEST_CODE,
-                        *permission
-                    )
-
-                    AWDLog.d("沒簡訊權限")
-                }
-            } else {
-
+                checkSmsPermission(false)
             }
+        }
+    }
+
+    private fun checkSmsPermission(isSendSms: Boolean) {
+        val permission = arrayOf(Manifest.permission.SEND_SMS)
+        if (!EasyPermissions.hasPermissions(this, *permission)) {
+            AWDLog.d("沒簡訊權限")
+            EasyPermissions.requestPermissions(
+                this,
+                "開權限",
+                BaseConstants.SMS_PERMISSIONS_REQUEST_CODE,
+                *permission
+            )
+            return
+        }
+
+        AWDLog.d("有簡訊權限")
+        if (isSendSms) {
+            val sharedPreferences =
+                getSharedPreferences(BaseConstants.FAST_PASS, Context.MODE_PRIVATE)
+            startSendSms(sharedPreferences.getBoolean(BaseConstants.IS_AUTO_SEND, false))
         }
     }
 
@@ -244,9 +250,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
             mbAmSendSmsInformation.isEnabled = false
             scAmAutoSendSms.isEnabled = true
 
-            val sharedPreferences =
-                getSharedPreferences(BaseConstants.FAST_PASS, Context.MODE_PRIVATE)
-            startSendSms(sharedPreferences.getBoolean(BaseConstants.IS_AUTO_SEND, false))
+            checkSmsPermission(true)
         }
 
         override fun onSubscribe(d: Disposable) {

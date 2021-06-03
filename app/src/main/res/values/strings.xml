@@ -6,6 +6,8 @@
     <string name="smsCancel">簡訊取消寄出\n請重新掃描</string>
     <string name="autoSendSms">目前設定：自動寄出簡訊</string>
     <string name="manualSendSms">目前設定：手動寄出簡訊</string>
+    <string name="auto">自</string>
+    <string name="manual">手</string>
     <string name="smsInformation">簡訊號碼：%1$s\n簡訊內容：\n%2$s</string>
     <string name="flashlight">閃光燈</string>
 </resources>

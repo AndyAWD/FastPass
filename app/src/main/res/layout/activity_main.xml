@@ -27,11 +27,14 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:autoSizeTextType="uniform"
+            android:checked="false"
             android:gravity="center"
             android:lines="1"
             android:paddingStart="@dimen/magic_8dp"
             android:paddingEnd="@dimen/magic_8dp"
             android:text="@string/manualSendSms"
+            android:textOff="@string/manual"
+            android:textOn="@string/auto"
             app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toTopOf="@+id/avtAmScannerText"
             app:layout_constraintDimensionRatio="4:1"
@@ -41,7 +44,8 @@
             app:layout_constraintVertical_bias="0.0"
             app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintVertical_weight="1"
-            app:switchPadding="16dp"
+            app:showText="true"
+            app:switchPadding="24dp"
             tools:targetApi="o" />
 
         <com.google.android.material.textview.MaterialTextView
