@@ -1,16 +1,16 @@
 <resources>
     <string name="app_name">快速實連</string>
     <string name="title_activity_scanner">ScannerActivity</string>
-    <string name="smsTimer">還有%1$d秒寄出簡訊\n或者點我取消寄出</string>
-    <string name="smsSend">開始寄出簡訊</string>
-    <string name="smsCancel">簡訊取消寄出\n請重新掃瞄</string>
-    <string name="autoSendSms">目前設定：自動寄出簡訊</string>
-    <string name="manualSendSms">目前設定：手動寄出簡訊</string>
+    <string name="sms_timer">還有%1$d秒寄出簡訊\n或者點我取消寄出</string>
+    <string name="sms_send">開始寄出簡訊</string>
+    <string name="sms_cancel">簡訊取消寄出\n請重新掃瞄</string>
+    <string name="auto_send_sms">目前設定：自動寄出簡訊</string>
+    <string name="manual_send_sms">目前設定：手動寄出簡訊</string>
     <string name="auto">自</string>
     <string name="manual">手</string>
     <string name="open">開</string>
     <string name="close">關</string>
-    <string name="smsInformation">簡訊號碼：%1$s\n簡訊內容：\n%2$s</string>
+    <string name="sms_information">簡訊號碼：%1$s\n簡訊內容：\n%2$s</string>
     <string name="flashlight">閃光燈</string>
     <string name="scanner_qr_code">掃瞄QR Code</string>
     <string name="open_sms_1922_app">開啟簡訊1922頁面</string>

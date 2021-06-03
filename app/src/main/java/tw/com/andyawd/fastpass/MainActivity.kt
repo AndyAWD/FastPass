@@ -145,9 +145,9 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
 
     private fun setSendSmsText(isChecked: Boolean) {
         if (isChecked) {
-            scAmAutoSendSms.text = resources.getString(R.string.autoSendSms)
+            scAmAutoSendSms.text = resources.getString(R.string.auto_send_sms)
         } else {
-            scAmAutoSendSms.text = resources.getString(R.string.manualSendSms)
+            scAmAutoSendSms.text = resources.getString(R.string.manual_send_sms)
         }
     }
 
@@ -224,7 +224,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
 
         override fun onNext(t: Unit) {
             smsTimerDisposable?.dispose()
-            mbAmSendSmsInformation.text = resources.getString(R.string.smsCancel)
+            mbAmSendSmsInformation.text = resources.getString(R.string.sms_cancel)
             mbAmSendSmsInformation.isEnabled = false
             scAmAutoSendSms.isEnabled = true
             gAmTimer.visibility = View.VISIBLE
@@ -270,7 +270,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
     private val smsTimerSubscribe = object : Observer<Long> {
         override fun onComplete() {
 
-            mbAmSendSmsInformation.text = resources.getString(R.string.smsSend)
+            mbAmSendSmsInformation.text = resources.getString(R.string.sms_send)
             gAmTimer.visibility = View.VISIBLE
 
             mbAmSendSmsInformation.isEnabled = false
@@ -289,7 +289,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
         override fun onNext(t: Long) {
 
             val smsSecond = BaseConstants.SMS_SEND_TIMER - t - 1L
-            mbAmSendSmsInformation.text = resources.getString(R.string.smsTimer, smsSecond)
+            mbAmSendSmsInformation.text = resources.getString(R.string.sms_timer, smsSecond)
         }
 
         override fun onError(e: Throwable) {
@@ -332,7 +332,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
                 }
 
                 avtAmScannerText.text =
-                    resources.getString(R.string.smsInformation, smsSendNumber, smsSendText)
+                    resources.getString(R.string.sms_information, smsSendNumber, smsSendText)
 
                 mbAmSendSmsInformation.icon =
                     ActivityCompat.getDrawable(this, R.drawable.cancel_24_svg)
