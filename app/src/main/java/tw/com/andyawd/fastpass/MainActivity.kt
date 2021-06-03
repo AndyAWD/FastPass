@@ -24,8 +24,6 @@ import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.EasyPermissions.PermissionCallbacks
-import tw.com.andyawd.andyawdlibrary.AWDConstants
-import tw.com.andyawd.andyawdlibrary.AWDLog
 import java.util.concurrent.TimeUnit
 
 
@@ -55,8 +53,6 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
     }
 
     private fun initComponent() {
-        AWDLog.setLogLevel(AWDConstants.LOG_VERBOSE)
-
         val sharedPreferences =
             getSharedPreferences(BaseConstants.FAST_PASS, Context.MODE_PRIVATE)
         scAmAutoSendSms.isChecked = sharedPreferences.getBoolean(BaseConstants.IS_AUTO_SEND, false)
@@ -94,7 +90,6 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
     private fun checkSmsPermission(isSendSms: Boolean) {
         val permission = arrayOf(Manifest.permission.SEND_SMS)
         if (!EasyPermissions.hasPermissions(this, *permission)) {
-            AWDLog.d("沒簡訊權限")
             EasyPermissions.requestPermissions(
                 this,
                 resources.getString(R.string.please_sms_permission),
@@ -104,7 +99,6 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
             return
         }
 
-        AWDLog.d("有簡訊權限")
         if (isSendSms) {
             val sharedPreferences =
                 getSharedPreferences(BaseConstants.FAST_PASS, Context.MODE_PRIVATE)
@@ -131,7 +125,6 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
                 null
             )
 
-//            Toast.makeText(this, "簡訊就當作寄出了吧", Toast.LENGTH_SHORT).show()
             mbAmSendSmsInformation.text = resources.getString(R.string.sms_start_send)
             mbAmSendSmsInformation.icon =
                 ActivityCompat.getDrawable(this, R.drawable.autorenew_24_svg)
@@ -242,10 +235,8 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
 
     private val sendSmsReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            AWDLog.d("onReceive: $resultCode")
             when (resultCode) {
                 RESULT_OK -> {
-                    AWDLog.d("簡訊成功")
                     mbAmSendSmsInformation.text = resources.getString(R.string.sms_send_success)
                     mbAmSendSmsInformation.icon =
                         context?.let {
@@ -302,7 +293,6 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
 
         if (result == null) {
@@ -362,12 +352,10 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        AWDLog.d("onRequestPermissionsResult requestCode: $requestCode")
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
-        AWDLog.d("onPermissionsGranted requestCode: $requestCode")
         if (BaseConstants.SMS_PERMISSIONS_REQUEST_CODE == requestCode) {
             val sharedPreferences =
                 getSharedPreferences(BaseConstants.FAST_PASS, Context.MODE_PRIVATE)
@@ -376,7 +364,6 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
-        AWDLog.d("onPermissionsDenied requestCode: $requestCode")
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
             AlertDialog.Builder(this)
                 .setTitle(resources.getString(R.string.need_permission))
