@@ -9,5 +9,6 @@ class BaseConstants {
         const val SEND_SMS_ACTION = "send_sms_action"
         const val IS_AUTO_SEND = "is_auto_send"
         const val SMS_TO = "SMSTO"
+        const val STRING_EMPTY = ""
     }
 }

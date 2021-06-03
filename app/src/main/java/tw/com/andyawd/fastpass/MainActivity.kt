@@ -1,14 +1,15 @@
 package tw.com.andyawd.fastpass
 
 import android.Manifest
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
 import android.telephony.SmsManager
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding3.view.clicks
@@ -29,7 +30,8 @@ import java.util.concurrent.TimeUnit
 class MainActivity : AppCompatActivity(), PermissionCallbacks {
 
     private var smsTimerDisposable: Disposable? = null
-    private var scannerArray: Array<String>? = null
+    private var smsSendNumber: String = BaseConstants.STRING_EMPTY
+    private var smsSendText: String = BaseConstants.STRING_EMPTY
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,35 +106,31 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
     private fun startSendSms(isAutoSend: Boolean) {
 
         if (isAutoSend) {
-//            val smsManager = SmsManager.getDefault()
-//
-//            val sendSmsActionIntent = Intent(BaseConstants.SEND_SMS_ACTION)
-//            val sendSmsActionBroadcast =
-//                PendingIntent.getBroadcast(this, 102, sendSmsActionIntent, 0)
-//
-//            registerReceiver(sendSmsReceiver, IntentFilter(BaseConstants.SEND_SMS_ACTION))
-//
-//            smsManager.sendTextMessage(
-//                "0910543299",
-//                null,
-//                "測試簡訊",
-//                sendSmsActionBroadcast,
-//                null
-//            )
+            val smsManager = SmsManager.getDefault()
 
-            Toast.makeText(this, "簡訊就當作寄出了吧", Toast.LENGTH_SHORT).show()
-            mbAmSendSmsInformation.text = "簡訊寄出成功"
+            val sendSmsActionIntent = Intent(BaseConstants.SEND_SMS_ACTION)
+            val sendSmsActionBroadcast =
+                PendingIntent.getBroadcast(this, 102, sendSmsActionIntent, 0)
+
+            registerReceiver(sendSmsReceiver, IntentFilter(BaseConstants.SEND_SMS_ACTION))
+
+            smsManager.sendTextMessage(
+                smsSendNumber,
+                null,
+                smsSendText,
+                sendSmsActionBroadcast,
+                null
+            )
+
+//            Toast.makeText(this, "簡訊就當作寄出了吧", Toast.LENGTH_SHORT).show()
+            mbAmSendSmsInformation.text = "簡訊寄出中..."
         } else {
-            if (!BaseConstants.SMS_TO.equals(scannerArray?.get(0), false)) {
-                return
-            }
-
             mbAmSendSmsInformation.visibility = View.GONE
 
             val intent = Intent()
             intent.action = Intent.ACTION_SENDTO
-            intent.data = Uri.parse("smsto:${scannerArray?.get(1)}")
-            intent.putExtra("sms_body", scannerArray?.get(2))
+            intent.data = Uri.parse("smsto:${smsSendNumber}")
+            intent.putExtra("sms_body", smsSendText)
             startActivity(intent)
         }
     }
@@ -288,21 +286,24 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
             try {
                 mbAmSendSmsInformation.isEnabled = true
 
-                scannerArray = scannerText.split(":").toTypedArray()
+                val checkScannerArray: Array<String> = scannerText.split(":").toTypedArray()
+                smsSendNumber = checkScannerArray[1]
+                smsSendText = checkScannerArray[2]
 
-                if ("1922" != scannerArray?.get(1)) {
+                if ("1922" != smsSendNumber) {
                     mbAmSendSmsInformation.visibility = View.GONE
                     avtAmScannerText.text = "簡訊號碼不是1922"
+                    return
+                }
 
+                if (!BaseConstants.SMS_TO.equals(checkScannerArray[0], false)) {
+                    mbAmSendSmsInformation.visibility = View.GONE
+                    avtAmScannerText.text = "這個QR Code不能傳送簡訊"
                     return
                 }
 
                 avtAmScannerText.text =
-                    resources.getString(
-                        R.string.smsInformation,
-                        scannerArray?.get(1),
-                        scannerArray?.get(2)
-                    )
+                    resources.getString(R.string.smsInformation, smsSendNumber, smsSendText)
 
                 Observable
                     .interval(0, 1, TimeUnit.SECONDS)
@@ -327,10 +328,12 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        AWDLog.d("onRequestPermissionsResult requestCode: $requestCode")
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
+        AWDLog.d("onPermissionsGranted requestCode: $requestCode")
         if (BaseConstants.SMS_PERMISSIONS_REQUEST_CODE == requestCode) {
             val sharedPreferences =
                 getSharedPreferences(BaseConstants.FAST_PASS, Context.MODE_PRIVATE)
@@ -339,6 +342,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
+        AWDLog.d("onPermissionsDenied requestCode: $requestCode")
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
             AWDPermissionsFailAlertDialog(this, perms)
         }
