@@ -17,7 +17,7 @@
 
 
     <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/scAscAutoSendSms"
+        android:id="@+id/scAscFlashlightSwitch"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginBottom="40dp"

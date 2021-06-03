@@ -85,6 +85,8 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
             if (b) {
                 checkSmsPermission(false)
             }
+
+            firebase(BaseConstants.AUTO_SEND_SMS)
         }
     }
 
