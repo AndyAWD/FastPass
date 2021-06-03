@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">快速實連</string>
     <string name="title_activity_scanner">ScannerActivity</string>
-    <string name="smsTimer">還有%1$d秒寄出簡訊\n或者點我取消寄出簡訊</string>
+    <string name="smsTimer">還有%1$d秒寄出簡訊\n或者點我取消寄出</string>
     <string name="smsSend">開始寄出簡訊</string>
     <string name="smsCancel">簡訊取消寄出\n請重新掃描</string>
     <string name="autoSendSms">目前設定：自動寄出簡訊</string>
