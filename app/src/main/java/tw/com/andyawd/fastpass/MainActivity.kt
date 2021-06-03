@@ -159,11 +159,11 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
         intentIntegrator.initiateScan()
     }
 
-    private fun intentSmsApp() {
+    private fun intentSmsApp(smsSendNumber: String, smsSendText: String) {
         val intent = Intent()
         intent.action = Intent.ACTION_SENDTO
-        intent.data = Uri.parse("smsto:1922")
-        intent.putExtra("sms_body", "")
+        intent.data = Uri.parse("smsto:$smsSendNumber")
+        intent.putExtra("sms_body", smsSendText)
         startActivity(intent)
     }
 
@@ -195,7 +195,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
         }
 
         override fun onNext(t: Unit) {
-            intentSmsApp()
+            intentSmsApp("1922", BaseConstants.STRING_EMPTY)
         }
 
         override fun onError(e: Throwable) {
@@ -227,16 +227,22 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
 
     private val sendSmsReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
+            AWDLog.d("onReceive: $resultCode")
             when (resultCode) {
                 RESULT_OK -> {
                     AWDLog.d("簡訊成功")
-                    mbAmSendSmsInformation.text = "簡訊寄出成功"
-                    intentSmsApp()
+                    mbAmSendSmsInformation.text = resources.getString(R.string.sms_send_success)
+                    intentSmsApp("1922", BaseConstants.STRING_EMPTY)
                 }
-                SmsManager.RESULT_ERROR_GENERIC_FAILURE -> AWDLog.d("錯誤")
-                SmsManager.RESULT_ERROR_RADIO_OFF -> AWDLog.d("廣播關閉")
-                SmsManager.RESULT_ERROR_NULL_PDU -> AWDLog.d("沒有PDU")
-                SmsManager.RESULT_ERROR_NO_SERVICE -> AWDLog.d("無法使用簡訊")
+                SmsManager.RESULT_NO_DEFAULT_SMS_APP -> {
+                    mbAmSendSmsInformation.text = "沒有安裝Sim卡"
+                }
+                else -> {
+                    mbAmSendSmsInformation.text = "自動寄出有點問題，改成手動寄出簡訊"
+                    scAmAutoSendSms.isChecked = false
+                    setSendSmsText(false)
+                    intentSmsApp(smsSendNumber, smsSendText)
+                }
             }
         }
     }
