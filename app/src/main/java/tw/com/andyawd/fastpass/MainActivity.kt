@@ -8,8 +8,10 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.telephony.SmsManager
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -24,7 +26,6 @@ import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.EasyPermissions.PermissionCallbacks
 import tw.com.andyawd.andyawdlibrary.AWDConstants
 import tw.com.andyawd.andyawdlibrary.AWDLog
-import tw.com.andyawd.andyawdlibrary.AWDPermissionsFailAlertDialog
 import java.util.concurrent.TimeUnit
 
 
@@ -353,7 +354,6 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
             mbAmSendSmsInformation.visibility = View.GONE
             avtAmScannerText.text = resources.getString(R.string.qr_code_no_data)
         }
-
     }
 
     override fun onRequestPermissionsResult(
@@ -378,7 +378,17 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
         AWDLog.d("onPermissionsDenied requestCode: $requestCode")
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
-            AWDPermissionsFailAlertDialog(this, perms)
+            AlertDialog.Builder(this)
+                .setTitle(resources.getString(R.string.need_permission))
+                .setCancelable(false)
+                .setMessage(resources.getString(R.string.open_sms_permission))
+                .setPositiveButton(resources.getString(R.string.confirm)) { _, _ ->
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri = Uri.fromParts(BaseConstants.PACKAGE, packageName, null)
+                    intent.data = uri
+                    startActivity(intent)
+                }
+                .show()
         }
     }
 }
