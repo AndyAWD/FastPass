@@ -26,6 +26,8 @@
             android:id="@+id/scAmAutoSendSms"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:autoSizeTextType="uniform"
+            android:gravity="center"
             android:lines="1"
             android:paddingStart="@dimen/magic_8dp"
             android:paddingEnd="@dimen/magic_8dp"
@@ -39,9 +41,10 @@
             app:layout_constraintVertical_bias="0.0"
             app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintVertical_weight="1"
-            app:switchPadding="16dp" />
+            app:switchPadding="16dp"
+            tools:targetApi="o" />
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/avtAmScannerText"
             android:layout_width="0dp"
             android:layout_height="0dp"
