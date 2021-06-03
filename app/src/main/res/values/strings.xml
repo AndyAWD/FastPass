@@ -15,4 +15,13 @@
     <string name="scanner_qr_code">掃瞄QR Code</string>
     <string name="open_sms_1922_app">開啟簡訊1922頁面</string>
     <string name="sms_send_success">簡訊寄出成功</string>
+    <string name="please_sms_permission">請允許簡訊權限</string>
+    <string name="sms_start_send">簡訊寄出中</string>
+    <string name="phone_no_sim">手機沒有Sim卡</string>
+    <string name="auto_send_problem_change_manual">自動寄出有點問題\n改成手動寄出簡訊</string>
+    <string name="qr_code_scanner_error">QR Code掃瞄錯誤</string>
+    <string name="sms_not_1922">簡訊號碼不是1922</string>
+    <string name="qr_code_cannot_send">這個QR Code不能寄出簡訊</string>
+    <string name="qr_code_format_error">QR Code格式錯誤</string>
+    <string name="qr_code_no_data">QR Code沒有資料</string>
 </resources>

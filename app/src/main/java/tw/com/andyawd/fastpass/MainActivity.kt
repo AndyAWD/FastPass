@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
             AWDLog.d("沒簡訊權限")
             EasyPermissions.requestPermissions(
                 this,
-                "開權限",
+                resources.getString(R.string.please_sms_permission),
                 BaseConstants.SMS_PERMISSIONS_REQUEST_CODE,
                 *permission
             )
@@ -129,14 +129,14 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
             )
 
 //            Toast.makeText(this, "簡訊就當作寄出了吧", Toast.LENGTH_SHORT).show()
-            mbAmSendSmsInformation.text = "簡訊寄出中..."
+            mbAmSendSmsInformation.text = resources.getString(R.string.sms_start_send)
         } else {
             mbAmSendSmsInformation.visibility = View.GONE
 
             val intent = Intent()
             intent.action = Intent.ACTION_SENDTO
-            intent.data = Uri.parse("smsto:${smsSendNumber}")
-            intent.putExtra("sms_body", smsSendText)
+            intent.data = Uri.parse("${BaseConstants.SMS_TO_SMALL_CAPS}:${smsSendNumber}")
+            intent.putExtra(BaseConstants.SMS_BODY, smsSendText)
             startActivity(intent)
         }
     }
@@ -162,8 +162,8 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
     private fun intentSmsApp(smsSendNumber: String, smsSendText: String) {
         val intent = Intent()
         intent.action = Intent.ACTION_SENDTO
-        intent.data = Uri.parse("smsto:$smsSendNumber")
-        intent.putExtra("sms_body", smsSendText)
+        intent.data = Uri.parse("${BaseConstants.SMS_TO_SMALL_CAPS}:$smsSendNumber")
+        intent.putExtra(BaseConstants.SMS_BODY, smsSendText)
         startActivity(intent)
     }
 
@@ -195,7 +195,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
         }
 
         override fun onNext(t: Unit) {
-            intentSmsApp("1922", BaseConstants.STRING_EMPTY)
+            intentSmsApp(BaseConstants.CDC_SMS_NUMBER, BaseConstants.STRING_EMPTY)
         }
 
         override fun onError(e: Throwable) {
@@ -232,13 +232,14 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
                 RESULT_OK -> {
                     AWDLog.d("簡訊成功")
                     mbAmSendSmsInformation.text = resources.getString(R.string.sms_send_success)
-                    intentSmsApp("1922", BaseConstants.STRING_EMPTY)
+                    intentSmsApp(BaseConstants.CDC_SMS_NUMBER, BaseConstants.STRING_EMPTY)
                 }
                 SmsManager.RESULT_NO_DEFAULT_SMS_APP -> {
-                    mbAmSendSmsInformation.text = "沒有安裝Sim卡"
+                    mbAmSendSmsInformation.text = resources.getString(R.string.phone_no_sim)
                 }
                 else -> {
-                    mbAmSendSmsInformation.text = "自動寄出有點問題，改成手動寄出簡訊"
+                    mbAmSendSmsInformation.text =
+                        resources.getString(R.string.auto_send_problem_change_manual)
                     scAmAutoSendSms.isChecked = false
                     setSendSmsText(false)
                     intentSmsApp(smsSendNumber, smsSendText)
@@ -285,7 +286,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
 
         if (result == null) {
             mbAmSendSmsInformation.visibility = View.GONE
-            avtAmScannerText.text = "掃瞄錯誤"
+            avtAmScannerText.text = resources.getString(R.string.qr_code_scanner_error)
             return
         }
 
@@ -300,15 +301,15 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
                 smsSendNumber = checkScannerArray[1]
                 smsSendText = checkScannerArray[2]
 
-                if ("1922" != smsSendNumber) {
+                if (BaseConstants.CDC_SMS_NUMBER != smsSendNumber) {
                     mbAmSendSmsInformation.visibility = View.GONE
-                    avtAmScannerText.text = "簡訊號碼不是1922"
+                    avtAmScannerText.text = resources.getString(R.string.sms_not_1922)
                     return
                 }
 
                 if (!BaseConstants.SMS_TO.equals(checkScannerArray[0], false)) {
                     mbAmSendSmsInformation.visibility = View.GONE
-                    avtAmScannerText.text = "這個QR Code不能傳送簡訊"
+                    avtAmScannerText.text = resources.getString(R.string.qr_code_format_error)
                     return
                 }
 
@@ -323,11 +324,11 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
 
             } catch (e: Exception) {
                 mbAmSendSmsInformation.visibility = View.GONE
-                avtAmScannerText.text = "QR Code讀取失敗"
+                avtAmScannerText.text = resources.getString(R.string.qr_code_cannot_send)
             }
         } else {
             mbAmSendSmsInformation.visibility = View.GONE
-            avtAmScannerText.text = "掃不到資料"
+            avtAmScannerText.text = resources.getString(R.string.qr_code_no_data)
         }
 
     }

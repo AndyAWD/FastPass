@@ -10,5 +10,9 @@ class BaseConstants {
         const val IS_AUTO_SEND = "is_auto_send"
         const val SMS_TO = "SMSTO"
         const val STRING_EMPTY = ""
+        const val CDC_SMS_NUMBER = "1922"
+        const val SMS_TO_SMALL_CAPS = "smsto"
+        const val SMS_BODY = "sms_body"
+
     }
 }
