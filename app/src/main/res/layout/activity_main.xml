@@ -11,8 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:animateLayoutChanges="true"
-        android:background="@color/hexColor138_MediumSlateBlue">
+        android:animateLayoutChanges="true">
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/gAmTimer"
@@ -35,6 +34,7 @@
             android:text="@string/manualSendSms"
             android:textOff="@string/manual"
             android:textOn="@string/auto"
+            android:theme="@style/Theme.FastPass.NoActionBar"
             app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toTopOf="@+id/avtAmScannerText"
             app:layout_constraintDimensionRatio="4:1"
@@ -52,6 +52,8 @@
             android:id="@+id/avtAmScannerText"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_margin="@dimen/magic_8dp"
+            android:background="@drawable/rounded_hollow_ffffff_width2_radius16"
             android:padding="@dimen/magic_8dp"
             app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toTopOf="@+id/mbAmSendSmsInformation"

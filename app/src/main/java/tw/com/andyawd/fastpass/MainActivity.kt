@@ -24,7 +24,6 @@ import pub.devrel.easypermissions.EasyPermissions.PermissionCallbacks
 import tw.com.andyawd.andyawdlibrary.AWDConstants
 import tw.com.andyawd.andyawdlibrary.AWDLog
 import tw.com.andyawd.andyawdlibrary.AWDPermissionsFailAlertDialog
-import java.util.Objects.requireNonNull
 import java.util.concurrent.TimeUnit
 
 
@@ -37,7 +36,6 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        requireNonNull(supportActionBar)?.hide()
 
         initComponent()
         initClickListener()

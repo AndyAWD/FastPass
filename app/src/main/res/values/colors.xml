@@ -7,4 +7,16 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="night_594c5d">#594C5D</color>
+    <color name="night_1a1406">#1A1406</color>
+    <color name="night_721940">#721940</color>
+    <color name="night_ad4d32">#AD4D32</color>
+    <color name="night_f1e3a7">#F1E3A7</color>
+
+    <color name="light_f8f2da">#F8F2DA</color>
+    <color name="light_cadfeb">#CADFEB</color>
+    <color name="light_ebddca">#EBDDCA</color>
+    <color name="light_ffc7dd">#FFC7DD</color>
+    <color name="light_624d6b">#624D6B</color>
 </resources>

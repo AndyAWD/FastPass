@@ -1,14 +1,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.FastPass" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.FastPass" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/black</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimary">@color/night_721940</item>
+        <item name="colorPrimaryVariant">@color/night_594c5d</item>
+        <item name="colorOnPrimary">@color/night_f1e3a7</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondary">@color/night_ad4d32</item>
+        <item name="colorSecondaryVariant">@color/night_1a1406</item>
+        <item name="colorOnSecondary">@color/night_f1e3a7</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
