@@ -3,7 +3,7 @@
     <string name="title_activity_scanner">ScannerActivity</string>
     <string name="smsTimer">還有%1$d秒寄出簡訊\n或者點我取消寄出</string>
     <string name="smsSend">開始寄出簡訊</string>
-    <string name="smsCancel">簡訊取消寄出\n請重新掃描</string>
+    <string name="smsCancel">簡訊取消寄出\n請重新掃瞄</string>
     <string name="autoSendSms">目前設定：自動寄出簡訊</string>
     <string name="manualSendSms">目前設定：手動寄出簡訊</string>
     <string name="auto">自</string>
@@ -22,6 +22,7 @@
     <string name="qr_code_scanner_error">QR Code掃瞄錯誤</string>
     <string name="sms_not_1922">簡訊號碼不是1922</string>
     <string name="qr_code_cannot_send">這個QR Code不能寄出簡訊</string>
-    <string name="qr_code_format_error">QR Code格式錯誤</string>
-    <string name="qr_code_no_data">QR Code沒有資料</string>
+    <string name="qr_code_format_error">QR Code\n格式錯誤</string>
+    <string name="qr_code_no_data">QR Code\n沒有資料</string>
+    <string name="click_qr_code_scanner">點擊\n掃瞄QR Code\n開始掃瞄</string>
 </resources>
