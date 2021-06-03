@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.telephony.SmsManager
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.Observable
@@ -130,6 +131,8 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
 
 //            Toast.makeText(this, "簡訊就當作寄出了吧", Toast.LENGTH_SHORT).show()
             mbAmSendSmsInformation.text = resources.getString(R.string.sms_start_send)
+            mbAmSendSmsInformation.icon =
+                ActivityCompat.getDrawable(this, R.drawable.autorenew_24_svg)
         } else {
             mbAmSendSmsInformation.visibility = View.GONE
 
@@ -232,6 +235,13 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
                 RESULT_OK -> {
                     AWDLog.d("簡訊成功")
                     mbAmSendSmsInformation.text = resources.getString(R.string.sms_send_success)
+                    mbAmSendSmsInformation.icon =
+                        context?.let {
+                            ActivityCompat.getDrawable(
+                                it,
+                                R.drawable.check_circle_24_svg
+                            )
+                        }
                     intentSmsApp(BaseConstants.CDC_SMS_NUMBER, BaseConstants.STRING_EMPTY)
                 }
                 SmsManager.RESULT_NO_DEFAULT_SMS_APP -> {
@@ -270,7 +280,6 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
         override fun onNext(t: Long) {
 
             val smsSecond = BaseConstants.SMS_SEND_TIMER - t - 1L
-
             mbAmSendSmsInformation.text = resources.getString(R.string.smsTimer, smsSecond)
         }
 
@@ -315,6 +324,9 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
 
                 avtAmScannerText.text =
                     resources.getString(R.string.smsInformation, smsSendNumber, smsSendText)
+
+                mbAmSendSmsInformation.icon =
+                    ActivityCompat.getDrawable(this, R.drawable.cancel_24_svg)
 
                 Observable
                     .interval(0, 1, TimeUnit.SECONDS)
