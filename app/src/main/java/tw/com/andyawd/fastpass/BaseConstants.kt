@@ -13,6 +13,9 @@ class BaseConstants {
         const val CDC_SMS_NUMBER = "1922"
         const val SMS_TO_SMALL_CAPS = "smsto"
         const val SMS_BODY = "sms_body"
+        const val START_SCANNER_CLICK = "startScannerClick"
+        const val OPEN_SMS_CLICK = "openSmsClick"
+        const val SEND_SMS_INFORMATION_CLICK = "sendSmsInformationClick"
 
     }
 }

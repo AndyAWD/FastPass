@@ -12,6 +12,7 @@ import android.telephony.SmsManager
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.zxing.integration.android.IntentIntegrator
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.Observable
@@ -168,6 +169,12 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
         startActivity(intent)
     }
 
+    private fun firebase(type: String) {
+        val bundle = Bundle()
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, type)
+        FirebaseAnalytics.getInstance(this).logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
+    }
+
     private val mbAmStartScannerClick = object : Observer<Unit> {
         override fun onComplete() {
 
@@ -179,6 +186,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
 
         override fun onNext(t: Unit) {
             startScanner()
+            firebase(BaseConstants.START_SCANNER_CLICK)
         }
 
         override fun onError(e: Throwable) {
@@ -197,6 +205,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
 
         override fun onNext(t: Unit) {
             intentSmsApp(BaseConstants.CDC_SMS_NUMBER, BaseConstants.STRING_EMPTY)
+            firebase(BaseConstants.OPEN_SMS_CLICK)
         }
 
         override fun onError(e: Throwable) {
@@ -219,6 +228,8 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
             mbAmSendSmsInformation.isEnabled = false
             scAmAutoSendSms.isEnabled = true
             gAmTimer.visibility = View.VISIBLE
+
+            firebase(BaseConstants.SEND_SMS_INFORMATION_CLICK)
         }
 
         override fun onError(e: Throwable) {
