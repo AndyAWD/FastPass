@@ -9,7 +9,7 @@
         android:scaleX="0.15044229"
         android:scaleY="0.15044229"
         android:translateX="32.33631"
-        android:translateY="22.5">
+        android:translateY="22">
         <group android:translateY="155.39062">
             <path
                 android:fillColor="#F1E3A7"
