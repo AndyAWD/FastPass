@@ -35,7 +35,7 @@
             android:textOff="@string/manual"
             android:textOn="@string/auto"
             android:theme="@style/Theme.FastPass.NoActionBar"
-            android:visibility="invisible"
+            android:visibility="visible"
             app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="4:1"
@@ -46,7 +46,7 @@
             app:showText="true"
             app:switchPadding="24dp"
             tools:targetApi="o"
-            tools:visibility="invisible" />
+            tools:visibility="visible" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/avtAmScannerText"
