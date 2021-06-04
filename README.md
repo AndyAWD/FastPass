@@ -1,5 +1,5 @@
 # 快速實聯
-
+[![Build Status](https://travis-ci.org/AndyAWD/FastPass.svg?branch=master)](https://travis-ci.org/AndyAWD/FastPass)
 ***
 
 最近簡訊實聯制開始後，我用Pixel 3a XL真的不太方便
