@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
         }
     }
 
-    private fun checkSmsPermission(isSendSms: Boolean) {
+    private fun checkSmsPermission() {
         val permission = arrayOf(Manifest.permission.SEND_SMS)
         if (!EasyPermissions.hasPermissions(this, *permission)) {
             EasyPermissions.requestPermissions(
@@ -95,14 +95,12 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
             return
         }
 
-        if (isSendSms) {
-            autoSendSms()
-        }
+        autoSendSms()
     }
 
     private fun startSendSms(isAutoSend: Boolean) {
         if (isAutoSend) {
-            checkSmsPermission(true)
+            checkSmsPermission()
         } else {
             manualSendSms(smsSendNumber, smsSendText)
         }
