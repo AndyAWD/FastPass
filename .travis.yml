@@ -6,7 +6,7 @@ language: android
 android:
   components:
     # 你可能需要修改下面兩項的版本
-    - build-tools-30
+    - build-tools-30.0.2
     - android-30
     # Android Support Repository
     - extra-android-m2repository
