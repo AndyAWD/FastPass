@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.telephony.SmsManager
 import android.view.View
+import android.widget.SeekBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
     private var smsSendNumber: String = BaseConstants.STRING_EMPTY
     private var smsSendText: String = BaseConstants.STRING_EMPTY
     private var isSendSms: Boolean = false
+    private var smsSettingTimer: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +61,10 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
         scAmAutoSendSms.isChecked = sharedPreferences.getBoolean(BaseConstants.IS_AUTO_SEND, false)
 
         setSendSmsText(scAmAutoSendSms.isChecked)
+
+        smsSettingTimer = sharedPreferences.getInt(BaseConstants.SMS_SEND_TIMER, 0)
+        acsbAmSendTimer.progress = smsSettingTimer
+        atvAmSendTimer.text = resources.getString(R.string.setting_sms_timer, smsSettingTimer)
     }
 
     private fun initClickListener() {
@@ -87,6 +93,9 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
 
             firebase(BaseConstants.AUTO_SEND_SMS)
         }
+
+        acsbAmSendTimer.setOnSeekBarChangeListener(acsbAmSendTimerSeekBarChange)
+
     }
 
     private fun checkSmsPermission() {
@@ -286,12 +295,29 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
 
         override fun onNext(t: Long) {
 
-            val smsSecond = BaseConstants.SMS_SEND_TIMER - t - 1L
+            val smsSecond = smsSettingTimer - t - 1L
             mbAmSendSmsInformation.text = resources.getString(R.string.sms_timer, smsSecond)
         }
 
         override fun onError(e: Throwable) {
 
+        }
+    }
+
+    private val acsbAmSendTimerSeekBarChange = object : SeekBar.OnSeekBarChangeListener {
+        override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+            smsSettingTimer = p1
+            atvAmSendTimer.text = resources.getString(R.string.setting_sms_timer, smsSettingTimer)
+        }
+
+        override fun onStartTrackingTouch(p0: SeekBar?) {
+            atvAmSendTimer.text = resources.getString(R.string.setting_sms_timer, smsSettingTimer)
+        }
+
+        override fun onStopTrackingTouch(p0: SeekBar?) {
+            val sharedPreferences =
+                getSharedPreferences(BaseConstants.FAST_PASS, Context.MODE_PRIVATE)
+            sharedPreferences.edit().putInt(BaseConstants.SMS_SEND_TIMER, smsSettingTimer).apply()
         }
     }
 
@@ -342,7 +368,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
 
                 Observable
                     .interval(0, 1, TimeUnit.SECONDS)
-                    .take(BaseConstants.SMS_SEND_TIMER)
+                    .take(smsSettingTimer.toLong())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(smsTimerSubscribe)
 

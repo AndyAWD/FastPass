@@ -3,7 +3,7 @@ package tw.com.andyawd.fastpass
 class BaseConstants {
     companion object {
         const val FAST_PASS = "fast_pass"
-        const val SMS_SEND_TIMER = 4L
+        const val SMS_SEND_TIMER = "sms_send_timer"
         const val CLICK_CLOCK_TIMER = 1000L
         const val SMS_PERMISSIONS_REQUEST_CODE = 101
         const val SEND_SMS_ACTION = "send_sms_action"

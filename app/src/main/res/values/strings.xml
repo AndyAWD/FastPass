@@ -2,6 +2,7 @@
     <string name="app_name">快速實聯</string>
     <string name="title_activity_scanner">ScannerActivity</string>
     <string name="sms_timer">還有%1$d秒寄出簡訊\n或者點我取消寄出</string>
+    <string name="setting_sms_timer">簡訊寄出倒數 %1$d 秒</string>
     <string name="sms_send">開始寄出簡訊</string>
     <string name="sms_cancel">簡訊取消寄出\n請重新掃瞄</string>
     <string name="auto_send_sms">目前設定：自動寄出簡訊</string>

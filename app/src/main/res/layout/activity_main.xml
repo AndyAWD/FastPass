@@ -25,6 +25,10 @@
             android:id="@+id/scAmAutoSendSms"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginStart="@dimen/magic_8dp"
+            android:layout_marginTop="@dimen/magic_8dp"
+            android:layout_marginEnd="@dimen/magic_8dp"
+            android:layout_marginBottom="@dimen/magic_4dp"
             android:autoSizeTextType="uniform"
             android:checked="false"
             android:gravity="center"
@@ -34,19 +38,48 @@
             android:text="@string/manual_send_sms"
             android:textOff="@string/manual"
             android:textOn="@string/auto"
-            android:theme="@style/Theme.FastPass.NoActionBar"
             android:visibility="visible"
             app:autoSizeTextType="uniform"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="4:1"
+            app:layout_constraintBottom_toTopOf="@+id/acsbAmSendTimer"
+            app:layout_constraintDimensionRatio="6:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintVertical_chainStyle="packed"
             app:showText="true"
             app:switchPadding="24dp"
             tools:targetApi="o"
             tools:visibility="visible" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/atvAmSendTimer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/magic_8dp"
+            android:layout_marginTop="@dimen/magic_8dp"
+            android:layout_marginEnd="@dimen/magic_8dp"
+            android:layout_marginBottom="@dimen/magic_4dp"
+            android:gravity="center|top"
+            android:lines="1"
+            android:text="@string/setting_sms_timer"
+            app:layout_constraintBottom_toBottomOf="@+id/acsbAmSendTimer"
+            app:layout_constraintEnd_toEndOf="@+id/acsbAmSendTimer"
+            app:layout_constraintStart_toStartOf="@+id/acsbAmSendTimer"
+            app:layout_constraintTop_toTopOf="@+id/acsbAmSendTimer" />
+
+        <androidx.appcompat.widget.AppCompatSeekBar
+            android:id="@+id/acsbAmSendTimer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:max="20"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:progress="0"
+            app:layout_constraintBottom_toTopOf="@+id/avtAmScannerText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/scAmAutoSendSms" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/avtAmScannerText"
@@ -61,7 +94,7 @@
             app:layout_constraintDimensionRatio="3:2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scAmAutoSendSms"
+            app:layout_constraintTop_toBottomOf="@+id/acsbAmSendTimer"
             app:layout_constraintVertical_bias="0.0"
             tools:text="@string/click_qr_code_scanner" />
 
