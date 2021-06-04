@@ -36,21 +36,19 @@
             android:textOn="@string/auto"
             android:theme="@style/Theme.FastPass.NoActionBar"
             app:autoSizeTextType="uniform"
-            app:layout_constraintBottom_toTopOf="@+id/avtAmScannerText"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="4:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintVertical_weight="1"
             app:showText="true"
             app:switchPadding="24dp"
             tools:targetApi="o" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/avtAmScannerText"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="@dimen/magic_8dp"
             android:background="@drawable/rounded_hollow_ffffff_width2_radius16"
@@ -58,10 +56,11 @@
             android:text="@string/click_qr_code_scanner"
             app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toTopOf="@+id/mbAmSendSmsInformation"
+            app:layout_constraintDimensionRatio="3:2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/scAmAutoSendSms"
-            app:layout_constraintVertical_weight="2"
+            app:layout_constraintVertical_bias="0.0"
             tools:text="@string/click_qr_code_scanner" />
 
         <com.google.android.material.button.MaterialButton

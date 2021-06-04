@@ -79,10 +79,6 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
 
             setSendSmsText(b)
 
-            if (b) {
-                checkSmsPermission(false)
-            }
-
             firebase(BaseConstants.AUTO_SEND_SMS)
         }
     }
@@ -100,43 +96,50 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
         }
 
         if (isSendSms) {
-            val sharedPreferences =
-                getSharedPreferences(BaseConstants.FAST_PASS, Context.MODE_PRIVATE)
-            startSendSms(sharedPreferences.getBoolean(BaseConstants.IS_AUTO_SEND, false))
+            autoSendSms()
         }
     }
 
     private fun startSendSms(isAutoSend: Boolean) {
-
         if (isAutoSend) {
-            val smsManager = SmsManager.getDefault()
-
-            val sendSmsActionIntent = Intent(BaseConstants.SEND_SMS_ACTION)
-            val sendSmsActionBroadcast =
-                PendingIntent.getBroadcast(this, 102, sendSmsActionIntent, 0)
-
-            registerReceiver(sendSmsReceiver, IntentFilter(BaseConstants.SEND_SMS_ACTION))
-
-            smsManager.sendTextMessage(
-                smsSendNumber,
-                null,
-                smsSendText,
-                sendSmsActionBroadcast,
-                null
-            )
-
-            mbAmSendSmsInformation.text = resources.getString(R.string.sms_start_send)
-            mbAmSendSmsInformation.icon =
-                ActivityCompat.getDrawable(this, R.drawable.autorenew_24_svg)
+            checkSmsPermission(true)
         } else {
-            mbAmSendSmsInformation.visibility = View.GONE
-
-            val intent = Intent()
-            intent.action = Intent.ACTION_SENDTO
-            intent.data = Uri.parse("${BaseConstants.SMS_TO_SMALL_CAPS}:${smsSendNumber}")
-            intent.putExtra(BaseConstants.SMS_BODY, smsSendText)
-            startActivity(intent)
+            manualSendSms(smsSendNumber, smsSendText)
         }
+    }
+
+    private fun manualSendSms(smsSendNumber: String, smsSendText: String) {
+        mbAmSendSmsInformation.text = resources.getString(R.string.ready_open_sms_1922_app)
+        mbAmSendSmsInformation.icon =
+            ActivityCompat.getDrawable(this, R.drawable.check_circle_24_svg)
+
+        val intent = Intent()
+        intent.action = Intent.ACTION_SENDTO
+        intent.data = Uri.parse("${BaseConstants.SMS_TO_SMALL_CAPS}:$smsSendNumber")
+        intent.putExtra(BaseConstants.SMS_BODY, smsSendText)
+        startActivity(intent)
+    }
+
+    private fun autoSendSms() {
+        mbAmSendSmsInformation.text = resources.getString(R.string.sms_start_send)
+        mbAmSendSmsInformation.icon =
+            ActivityCompat.getDrawable(this, R.drawable.autorenew_24_svg)
+
+        val smsManager = SmsManager.getDefault()
+
+        val sendSmsActionIntent = Intent(BaseConstants.SEND_SMS_ACTION)
+        val sendSmsActionBroadcast =
+            PendingIntent.getBroadcast(this, 102, sendSmsActionIntent, 0)
+
+        registerReceiver(sendSmsReceiver, IntentFilter(BaseConstants.SEND_SMS_ACTION))
+
+        smsManager.sendTextMessage(
+            smsSendNumber,
+            null,
+            smsSendText,
+            sendSmsActionBroadcast,
+            null
+        )
     }
 
     private fun setSendSmsText(isChecked: Boolean) {
@@ -155,14 +158,6 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
         intentIntegrator.setBeepEnabled(false)
         intentIntegrator.setBarcodeImageEnabled(true)
         intentIntegrator.initiateScan()
-    }
-
-    private fun intentSmsApp(smsSendNumber: String, smsSendText: String) {
-        val intent = Intent()
-        intent.action = Intent.ACTION_SENDTO
-        intent.data = Uri.parse("${BaseConstants.SMS_TO_SMALL_CAPS}:$smsSendNumber")
-        intent.putExtra(BaseConstants.SMS_BODY, smsSendText)
-        startActivity(intent)
     }
 
     private fun firebase(type: String) {
@@ -200,7 +195,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
         }
 
         override fun onNext(t: Unit) {
-            intentSmsApp(BaseConstants.CDC_SMS_NUMBER, BaseConstants.STRING_EMPTY)
+            manualSendSms(BaseConstants.CDC_SMS_NUMBER, BaseConstants.STRING_EMPTY)
             firebase(BaseConstants.OPEN_SMS_CLICK)
         }
 
@@ -245,7 +240,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
                                 R.drawable.check_circle_24_svg
                             )
                         }
-                    intentSmsApp(BaseConstants.CDC_SMS_NUMBER, BaseConstants.STRING_EMPTY)
+                    manualSendSms(BaseConstants.CDC_SMS_NUMBER, BaseConstants.STRING_EMPTY)
                 }
                 SmsManager.RESULT_NO_DEFAULT_SMS_APP -> {
                     mbAmSendSmsInformation.text = resources.getString(R.string.phone_no_sim)
@@ -255,7 +250,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
                         resources.getString(R.string.auto_send_problem_change_manual)
                     scAmAutoSendSms.isChecked = false
                     setSendSmsText(false)
-                    intentSmsApp(smsSendNumber, smsSendText)
+                    manualSendSms(smsSendNumber, smsSendText)
                 }
             }
         }
@@ -270,7 +265,9 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
             mbAmSendSmsInformation.isEnabled = false
             scAmAutoSendSms.isEnabled = true
 
-            checkSmsPermission(true)
+            val sharedPreferences =
+                getSharedPreferences(BaseConstants.FAST_PASS, Context.MODE_PRIVATE)
+            startSendSms(sharedPreferences.getBoolean(BaseConstants.IS_AUTO_SEND, false))
         }
 
         override fun onSubscribe(d: Disposable) {
@@ -318,6 +315,12 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
                     return
                 }
 
+                if (smsSendText.isEmpty()) {
+                    mbAmSendSmsInformation.visibility = View.GONE
+                    avtAmScannerText.text = resources.getString(R.string.qr_code_empty)
+                    return
+                }
+
                 if (!BaseConstants.SMS_TO.equals(checkScannerArray[0], false)) {
                     mbAmSendSmsInformation.visibility = View.GONE
                     avtAmScannerText.text = resources.getString(R.string.qr_code_format_error)
@@ -357,9 +360,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
         if (BaseConstants.SMS_PERMISSIONS_REQUEST_CODE == requestCode) {
-            val sharedPreferences =
-                getSharedPreferences(BaseConstants.FAST_PASS, Context.MODE_PRIVATE)
-            startSendSms(sharedPreferences.getBoolean(BaseConstants.IS_AUTO_SEND, false))
+            autoSendSms()
         }
     }
 

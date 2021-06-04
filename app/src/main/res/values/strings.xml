@@ -14,6 +14,7 @@
     <string name="flashlight">閃光燈</string>
     <string name="scanner_qr_code">掃瞄QR Code</string>
     <string name="open_sms_1922_app">開啟簡訊1922頁面</string>
+    <string name="ready_open_sms_1922_app">正在開啟簡訊1922頁面</string>
     <string name="sms_send_success">簡訊寄出成功</string>
     <string name="please_sms_permission">請允許簡訊權限</string>
     <string name="sms_start_send">簡訊寄出中</string>
@@ -27,5 +28,6 @@
     <string name="click_qr_code_scanner">點擊\n掃瞄QR Code\n開始掃瞄</string>
     <string name="need_permission">權限不足</string>
     <string name="confirm">確認</string>
+    <string name="qr_code_empty">QR Code沒有傳送的訊息</string>
     <string name="open_sms_permission">請先開啟相關權限再使用此功能\n簡訊</string>
 </resources>
