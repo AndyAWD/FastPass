@@ -38,7 +38,7 @@
             android:text="@string/manual_send_sms"
             android:textOff="@string/manual"
             android:textOn="@string/auto"
-            android:visibility="invisible"
+            android:visibility="visible"
             app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toTopOf="@+id/acsbAmSendTimer"
             app:layout_constraintDimensionRatio="6:1"
