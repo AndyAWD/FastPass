@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
     private var smsTimerDisposable: Disposable? = null
     private var smsSendNumber: String = BaseConstants.STRING_EMPTY
     private var smsSendText: String = BaseConstants.STRING_EMPTY
-    private var isSendSms: Boolean = false
     private var smsSettingTimer: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,11 +83,6 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
                 getSharedPreferences(BaseConstants.FAST_PASS, Context.MODE_PRIVATE)
             sharedPreferences.edit().putBoolean(BaseConstants.IS_AUTO_SEND, b).apply()
 
-            if (b) {
-                isSendSms = false
-                checkSmsPermission()
-            }
-
             setSendSmsText(b)
 
             firebase(BaseConstants.AUTO_SEND_SMS)
@@ -110,9 +104,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
             return
         }
 
-        if (isSendSms) {
-            autoSendSms()
-        }
+        autoSendSms()
     }
 
     private fun startSendSms(isAutoSend: Boolean) {
@@ -191,7 +183,6 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
         }
 
         override fun onNext(t: Unit) {
-            isSendSms = true
             startScanner()
             firebase(BaseConstants.START_SCANNER_CLICK)
         }
@@ -393,9 +384,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
         if (BaseConstants.SMS_PERMISSIONS_REQUEST_CODE == requestCode) {
-            if (isSendSms) {
-                autoSendSms()
-            }
+            autoSendSms()
         }
     }
 
