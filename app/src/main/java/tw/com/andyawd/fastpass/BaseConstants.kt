@@ -17,6 +17,7 @@ class BaseConstants {
         const val OPEN_SMS_CLICK = "openSmsClick"
         const val SEND_SMS_INFORMATION_CLICK = "sendSmsInformationClick"
         const val AUTO_SEND_SMS = "autoSendSms"
+        const val MANUAL_SEND_SMS = "manualSendSms"
         const val FLASHLIGHT_SWITCH = "flashlightSwitch"
         const val PACKAGE = "package"
 

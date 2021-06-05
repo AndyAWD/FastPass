@@ -84,8 +84,6 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
             sharedPreferences.edit().putBoolean(BaseConstants.IS_AUTO_SEND, b).apply()
 
             setSendSmsText(b)
-
-            firebase(BaseConstants.AUTO_SEND_SMS)
         }
 
         acsbAmSendTimer.setOnSeekBarChangeListener(acsbAmSendTimerSeekBarChange)
@@ -116,6 +114,8 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
     }
 
     private fun manualSendSms(smsSendNumber: String, smsSendText: String) {
+        firebase(BaseConstants.MANUAL_SEND_SMS)
+
         mbAmSendSmsInformation.text = resources.getString(R.string.ready_open_sms_1922_app)
         mbAmSendSmsInformation.icon =
             ActivityCompat.getDrawable(this, R.drawable.check_circle_24_svg)
@@ -128,6 +128,8 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
     }
 
     private fun autoSendSms() {
+        firebase(BaseConstants.AUTO_SEND_SMS)
+
         mbAmSendSmsInformation.text = resources.getString(R.string.sms_start_send)
         mbAmSendSmsInformation.icon =
             ActivityCompat.getDrawable(this, R.drawable.autorenew_24_svg)
