@@ -81,19 +81,21 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
         scAmAutoSendSmsSwitch.setOnCheckedChangeListener { _, b ->
             firebase(BaseConstants.AUTO_SEND_SMS_SWITCH)
 
-            scAmAutoSendSmsSwitch.isChecked = false
-            avtAmScannerText.text = resources.getString(R.string.play_store_fail)
-
-            val intent = Intent()
-            intent.action = Intent.ACTION_VIEW
-            intent.data = Uri.parse(BaseConstants.GITHUB_WIKI)
-            startActivity(intent)
-
-//            val sharedPreferences =
-//                getSharedPreferences(BaseConstants.FAST_PASS, Context.MODE_PRIVATE)
-//            sharedPreferences.edit().putBoolean(BaseConstants.IS_AUTO_SEND, b).apply()
+            //Play商店用的程式碼
+//            scAmAutoSendSmsSwitch.isChecked = false
+//            avtAmScannerText.text = resources.getString(R.string.play_store_fail)
 //
-//            setSendSmsText(b)
+//            val intent = Intent()
+//            intent.action = Intent.ACTION_VIEW
+//            intent.data = Uri.parse(BaseConstants.GITHUB_WIKI)
+//            startActivity(intent)
+
+            //Apk版用的程式碼
+            val sharedPreferences =
+                getSharedPreferences(BaseConstants.FAST_PASS, Context.MODE_PRIVATE)
+            sharedPreferences.edit().putBoolean(BaseConstants.IS_AUTO_SEND, b).apply()
+
+            setSendSmsText(b)
         }
 
         acsbAmSendTimer.setOnSeekBarChangeListener(acsbAmSendTimerSeekBarChange)
