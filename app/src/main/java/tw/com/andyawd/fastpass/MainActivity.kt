@@ -328,62 +328,30 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
 
-        if (result == null) {
-            mbAmSendSmsInformation.visibility = View.GONE
-            avtAmScannerText.text = resources.getString(R.string.qr_code_scanner_error)
-            return
-        }
-
-        val scannerText = result.contents
-
-        if (scannerText != null) {
-
-            try {
-                mbAmSendSmsInformation.isEnabled = true
-
-                val checkScannerArray: Array<String> = scannerText.split(":").toTypedArray()
-                smsSendNumber = checkScannerArray[1]
-                smsSendText = checkScannerArray[2]
-
-                if (BaseConstants.CDC_SMS_NUMBER != smsSendNumber) {
-                    mbAmSendSmsInformation.visibility = View.GONE
-                    avtAmScannerText.text = resources.getString(R.string.sms_not_1922)
-                    return
-                }
-
-                if (smsSendText.isEmpty()) {
-                    mbAmSendSmsInformation.visibility = View.GONE
-                    avtAmScannerText.text = resources.getString(R.string.qr_code_empty)
-                    return
-                }
-
-                if (!BaseConstants.SMS_TO.equals(checkScannerArray[0], false)) {
-                    mbAmSendSmsInformation.visibility = View.GONE
-                    avtAmScannerText.text = resources.getString(R.string.qr_code_format_error)
-                    return
-                }
-
-                avtAmScannerText.text =
-                    resources.getString(R.string.sms_information, smsSendNumber, smsSendText)
-
-                mbAmSendSmsInformation.icon =
-                    ActivityCompat.getDrawable(this, R.drawable.cancel_24_svg)
-
-                Observable
-                    .interval(0, 1, TimeUnit.SECONDS)
-                    .take(smsSettingTimer.toLong())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(smsTimerSubscribe)
-
-            } catch (e: Exception) {
-                mbAmSendSmsInformation.visibility = View.GONE
-                avtAmScannerText.text = resources.getString(R.string.qr_code_cannot_send)
+        if (resultCode == RESULT_OK) {
+            if (requestCode != IntentIntegrator.REQUEST_CODE) {
+                return
             }
-        } else {
-            mbAmSendSmsInformation.visibility = View.GONE
-            avtAmScannerText.text = resources.getString(R.string.qr_code_no_data)
+
+            smsSendNumber = BaseConstants.CDC_SMS_NUMBER
+            smsSendText = data?.extras?.getString(BaseConstants.SMS_SEND_TEXT).toString()
+
+            avtAmScannerText.text = resources.getString(
+                R.string.sms_information,
+                BaseConstants.CDC_SMS_NUMBER,
+                smsSendText
+            )
+
+            mbAmSendSmsInformation.isEnabled = true
+            mbAmSendSmsInformation.icon =
+                ActivityCompat.getDrawable(this, R.drawable.cancel_24_svg)
+
+            Observable
+                .interval(0, 1, TimeUnit.SECONDS)
+                .take(smsSettingTimer.toLong())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(smsTimerSubscribe)
         }
     }
 

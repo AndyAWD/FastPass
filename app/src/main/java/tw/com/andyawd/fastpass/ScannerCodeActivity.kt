@@ -1,10 +1,12 @@
 package tw.com.andyawd.fastpass
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.journeyapps.barcodescanner.CaptureManager
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_scanner_code.*
 
 class ScannerCodeActivity : AppCompatActivity() {
@@ -50,6 +52,43 @@ class ScannerCodeActivity : AppCompatActivity() {
         captureManager = CaptureManager(this, dbvAscScanner)
         captureManager?.initializeFromIntent(intent, savedInstanceState)
         captureManager?.decode()
+
+        dbvAscScanner.decodeContinuous {
+            try {
+                val checkScannerArray: Array<String> =
+                    it.result.toString().split(":").toTypedArray()
+                val smsSendNumber = checkScannerArray[1]
+                val smsSendText = checkScannerArray[2]
+
+                if (BaseConstants.CDC_SMS_NUMBER != smsSendNumber) {
+                    return@decodeContinuous
+                }
+
+                if (smsSendText.isEmpty()) {
+                    return@decodeContinuous
+                }
+
+                if (!BaseConstants.SMS_TO.equals(checkScannerArray[0], false)) {
+                    return@decodeContinuous
+                }
+
+                dbvAscScanner.pause()
+                dbvAscScanner.barcodeView.isCameraClosed
+
+                val bundle = Bundle()
+                bundle.putString(BaseConstants.SMS_SEND_TEXT, smsSendText)
+
+                val intent = Intent()
+                intent.putExtras(bundle)
+
+                setResult(RESULT_OK, intent)
+                finish()
+
+            } catch (e: Exception) {
+
+            }
+
+        }
     }
 
     private fun firebase(type: String) {
