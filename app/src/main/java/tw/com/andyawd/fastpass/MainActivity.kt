@@ -57,9 +57,10 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
     private fun initComponent() {
         val sharedPreferences =
             getSharedPreferences(BaseConstants.FAST_PASS, Context.MODE_PRIVATE)
-        scAmAutoSendSms.isChecked = sharedPreferences.getBoolean(BaseConstants.IS_AUTO_SEND, false)
+        scAmAutoSendSmsSwitch.isChecked =
+            sharedPreferences.getBoolean(BaseConstants.IS_AUTO_SEND, false)
 
-        setSendSmsText(scAmAutoSendSms.isChecked)
+        setSendSmsText(scAmAutoSendSmsSwitch.isChecked)
 
         smsSettingTimer = sharedPreferences.getInt(BaseConstants.SMS_SEND_TIMER, 0)
         acsbAmSendTimer.progress = smsSettingTimer
@@ -77,13 +78,22 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
             .throttleFirst(BaseConstants.CLICK_CLOCK_TIMER, TimeUnit.MILLISECONDS)
             .subscribe(mbAmSendSmsInformationClick)
 
-        scAmAutoSendSms.setOnCheckedChangeListener { _, b ->
+        scAmAutoSendSmsSwitch.setOnCheckedChangeListener { _, b ->
+            firebase(BaseConstants.AUTO_SEND_SMS_SWITCH)
 
-            val sharedPreferences =
-                getSharedPreferences(BaseConstants.FAST_PASS, Context.MODE_PRIVATE)
-            sharedPreferences.edit().putBoolean(BaseConstants.IS_AUTO_SEND, b).apply()
+            scAmAutoSendSmsSwitch.isChecked = false
+            avtAmScannerText.text = resources.getString(R.string.play_store_fail)
 
-            setSendSmsText(b)
+            val intent = Intent()
+            intent.action = Intent.ACTION_VIEW
+            intent.data = Uri.parse(BaseConstants.GITHUB_WIKI)
+            startActivity(intent)
+
+//            val sharedPreferences =
+//                getSharedPreferences(BaseConstants.FAST_PASS, Context.MODE_PRIVATE)
+//            sharedPreferences.edit().putBoolean(BaseConstants.IS_AUTO_SEND, b).apply()
+//
+//            setSendSmsText(b)
         }
 
         acsbAmSendTimer.setOnSeekBarChangeListener(acsbAmSendTimerSeekBarChange)
@@ -153,9 +163,9 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
 
     private fun setSendSmsText(isChecked: Boolean) {
         if (isChecked) {
-            scAmAutoSendSms.text = resources.getString(R.string.auto_send_sms)
+            scAmAutoSendSmsSwitch.text = resources.getString(R.string.auto_send_sms)
         } else {
-            scAmAutoSendSms.text = resources.getString(R.string.manual_send_sms)
+            scAmAutoSendSmsSwitch.text = resources.getString(R.string.manual_send_sms)
         }
     }
 
@@ -226,7 +236,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
             smsTimerDisposable?.dispose()
             mbAmSendSmsInformation.text = resources.getString(R.string.sms_cancel)
             mbAmSendSmsInformation.isEnabled = false
-            scAmAutoSendSms.isEnabled = true
+            scAmAutoSendSmsSwitch.isEnabled = true
             gAmTimer.visibility = View.VISIBLE
 
             firebase(BaseConstants.SEND_SMS_INFORMATION_CLICK)
@@ -257,7 +267,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
                 else -> {
                     mbAmSendSmsInformation.text =
                         resources.getString(R.string.auto_send_problem_change_manual)
-                    scAmAutoSendSms.isChecked = false
+                    scAmAutoSendSmsSwitch.isChecked = false
                     setSendSmsText(false)
                     manualSendSms(smsSendNumber, smsSendText)
                 }
@@ -272,7 +282,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
             gAmTimer.visibility = View.VISIBLE
 
             mbAmSendSmsInformation.isEnabled = false
-            scAmAutoSendSms.isEnabled = true
+            scAmAutoSendSmsSwitch.isEnabled = true
 
             val sharedPreferences =
                 getSharedPreferences(BaseConstants.FAST_PASS, Context.MODE_PRIVATE)
@@ -283,7 +293,7 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
             smsTimerDisposable = d
             mbAmSendSmsInformation.visibility = View.VISIBLE
             gAmTimer.visibility = View.GONE
-            scAmAutoSendSms.isEnabled = false
+            scAmAutoSendSmsSwitch.isEnabled = false
         }
 
         override fun onNext(t: Long) {

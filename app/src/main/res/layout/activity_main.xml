@@ -22,7 +22,7 @@
             tools:visibility="visible" />
 
         <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/scAmAutoSendSms"
+            android:id="@+id/scAmAutoSendSmsSwitch"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/magic_8dp"
@@ -79,7 +79,7 @@
             app:layout_constraintBottom_toTopOf="@+id/avtAmScannerText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scAmAutoSendSms" />
+            app:layout_constraintTop_toBottomOf="@+id/scAmAutoSendSmsSwitch" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/avtAmScannerText"

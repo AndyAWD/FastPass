@@ -20,6 +20,8 @@ class BaseConstants {
         const val MANUAL_SEND_SMS = "manualSendSms"
         const val FLASHLIGHT_SWITCH = "flashlightSwitch"
         const val PACKAGE = "package"
+        const val GITHUB_WIKI = "https://github.com/AndyAWD/FastPass/wiki"
+        const val AUTO_SEND_SMS_SWITCH = "auto_send_sms_switch"
 
     }
 }
