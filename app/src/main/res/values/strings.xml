@@ -26,10 +26,12 @@
     <string name="qr_code_cannot_send">這個QR Code不能寄出簡訊</string>
     <string name="qr_code_format_error">QR Code\n格式錯誤</string>
     <string name="qr_code_no_data">QR Code\n沒有資料</string>
-    <string name="click_qr_code_scanner">點擊\n掃瞄QR Code\n開始掃瞄</string>
+    <string name="click_qr_code_scanner">請點擊掃瞄QR Code\n重新掃瞄</string>
     <string name="need_permission">權限不足</string>
     <string name="confirm">確認</string>
     <string name="qr_code_empty">QR Code沒有傳送的訊息</string>
     <string name="open_sms_permission">請先開啟相關權限再使用此功能\n簡訊</string>
     <string name="play_store_fail">Play商店版無法使用自動寄出\n請移除後下載Apk安裝自動版</string>
+    <string name="refresh_scanner">剛剛掃瞄的是：\n%1$s\n點擊[掃瞄QR Code]重新掃瞄</string>
+    <string name="scanner_information">簡訊實聯制的資料會顯示在這裡</string>
 </resources>

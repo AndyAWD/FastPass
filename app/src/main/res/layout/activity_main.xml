@@ -88,7 +88,7 @@
             android:layout_margin="@dimen/magic_8dp"
             android:background="@drawable/rounded_hollow_ffffff_width2_radius16"
             android:padding="16dp"
-            android:text="@string/click_qr_code_scanner"
+            android:text="@string/scanner_information"
             app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toTopOf="@+id/mbAmSendSmsInformation"
             app:layout_constraintDimensionRatio="3:2"
