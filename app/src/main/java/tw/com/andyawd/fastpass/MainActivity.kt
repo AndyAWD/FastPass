@@ -55,6 +55,10 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
     }
 
     private fun initComponent() {
+        val packageInfo = packageManager.getPackageInfo(packageName, 0)
+        avtAmScannerText.text =
+            resources.getString(R.string.scanner_information, packageInfo.versionName)
+
         val sharedPreferences =
             getSharedPreferences(BaseConstants.FAST_PASS, Context.MODE_PRIVATE)
         scAmAutoSendSmsSwitch.isChecked =
