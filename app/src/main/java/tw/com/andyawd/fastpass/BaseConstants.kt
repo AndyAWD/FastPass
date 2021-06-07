@@ -24,5 +24,6 @@ class BaseConstants {
         const val GITHUB_WIKI = "https://github.com/AndyAWD/FastPass/wiki"
         const val AUTO_SEND_SMS_SWITCH = "auto_send_sms_switch"
         const val SMS_SEND_TEXT = "sms_send_text"
+        const val VIBRATOR = "vibrator"
     }
 }

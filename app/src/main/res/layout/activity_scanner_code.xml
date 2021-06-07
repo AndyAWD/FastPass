@@ -15,6 +15,32 @@
         app:layout_constraintTop_toTopOf="parent"
         app:zxing_use_texture_view="true" />
 
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/scAscVibratorSwitch"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="40dp"
+        android:autoSizeTextType="uniform"
+        android:background="@drawable/rounded_8087ceeb_radius10"
+        android:checked="true"
+        android:lines="1"
+        android:paddingStart="16dp"
+        android:paddingTop="@dimen/magic_4dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="@dimen/magic_4dp"
+        android:text="@string/vibrator"
+        android:textOff="@string/close"
+        android:textOn="@string/open"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="4:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:showText="true"
+        app:switchPadding="24dp"
+        tools:targetApi="o" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/scAscFlashlightSwitch"
@@ -30,8 +56,6 @@
         android:textOff="@string/close"
         android:textOn="@string/open"
         app:autoSizeTextType="uniform"
-        android:theme="@style/Theme.FastPass.NoActionBar"
-        app:cornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="4:1"
         app:layout_constraintEnd_toEndOf="parent"
