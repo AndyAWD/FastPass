@@ -329,30 +329,33 @@ class MainActivity : AppCompatActivity(), PermissionCallbacks {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (resultCode == RESULT_OK) {
-            if (requestCode != IntentIntegrator.REQUEST_CODE) {
-                return
-            }
-
-            smsSendNumber = BaseConstants.CDC_SMS_NUMBER
-            smsSendText = data?.extras?.getString(BaseConstants.SMS_SEND_TEXT).toString()
-
-            avtAmScannerText.text = resources.getString(
-                R.string.sms_information,
-                BaseConstants.CDC_SMS_NUMBER,
-                smsSendText
-            )
-
-            mbAmSendSmsInformation.isEnabled = true
-            mbAmSendSmsInformation.icon =
-                ActivityCompat.getDrawable(this, R.drawable.cancel_24_svg)
-
-            Observable
-                .interval(0, 1, TimeUnit.SECONDS)
-                .take(smsSettingTimer.toLong())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(smsTimerSubscribe)
+        if (resultCode != RESULT_OK) {
+            return
         }
+
+        if (requestCode != IntentIntegrator.REQUEST_CODE) {
+            return
+        }
+
+        smsSendNumber = BaseConstants.CDC_SMS_NUMBER
+        smsSendText = data?.extras?.getString(BaseConstants.SMS_SEND_TEXT).toString()
+
+        avtAmScannerText.text = resources.getString(
+            R.string.sms_information,
+            BaseConstants.CDC_SMS_NUMBER,
+            smsSendText
+        )
+
+        mbAmSendSmsInformation.isEnabled = true
+        mbAmSendSmsInformation.icon =
+            ActivityCompat.getDrawable(this, R.drawable.cancel_24_svg)
+
+        Observable
+            .interval(0, 1, TimeUnit.SECONDS)
+            .take(smsSettingTimer.toLong())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(smsTimerSubscribe)
+
     }
 
     override fun onRequestPermissionsResult(
