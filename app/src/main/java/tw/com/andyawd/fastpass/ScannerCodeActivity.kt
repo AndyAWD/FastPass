@@ -58,7 +58,7 @@ class ScannerCodeActivity : AppCompatActivity() {
                     return@decodeContinuous
                 }
 
-                if (!BaseConstants.SMS_TO.equals(checkScannerArray[0], false)) {
+                if (!BaseConstants.SMS_TO.equals(checkScannerArray[0], true)) {
                     return@decodeContinuous
                 }
 
